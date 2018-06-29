@@ -13,18 +13,20 @@ TITLE Update Hosts
 if %ERRORLEVEL% NEQ 0 (
     ECHO This script must be run with administrator privileges!
     ECHO Please launch command prompt as administrator. Exiting...
+    PAUSE
     EXIT /B 1
 )
 
 if not exist "%WINDIR%\System32\drivers\etc\hosts.skel" (
-	COPY %WINDIR%\System32\drivers\etc\hosts %WINDIR%\System32\drivers\etc\hosts.skel
+    COPY %WINDIR%\System32\drivers\etc\hosts %WINDIR%\System32\drivers\etc\hosts.skel
 )
 
 :: Update hosts file
-python updateHostsFile.py -a
+python %0\..\updateHostsFile.py -a
 
 :: Move new hosts file in-place
-COPY hosts %WINDIR%\System32\drivers\etc\
+COPY /Y %0\..\hosts %WINDIR%\System32\drivers\etc
 
 :: Flush the DNS cache
 ipconfig /flushdns
+PAUSE
